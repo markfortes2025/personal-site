@@ -1245,3 +1245,30 @@ footer p {
         color: black !important;
     }
 }
+
+/* ===== BROKEN IMAGE HANDLING ===== */
+.skill-logo {
+    /* When image fails to load, style the alt text nicely */
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    color: #a0aec0;
+    text-align: center;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 4px;
+    line-height: 1.2;
+    /* Hide the broken image icon */
+    text-indent: 0;
+    overflow: hidden;
+}
+
+/* When image loads successfully, remove the background styling */
+.skill-logo[src]:not([src=""]) {
+    background: transparent;
+    border: none;
+    padding: 0;
+    color: transparent;
+    text-indent: -9999px;
+}
