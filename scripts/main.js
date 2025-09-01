@@ -24,6 +24,7 @@
         initializeAnimalInteraction();
         setupKeyboardNavigation();
         handleReducedMotionPreference();
+        handleBrokenImages();
     });
 
     function initializeNavigation() {
@@ -242,6 +243,44 @@
         
         if (mediaQuery.addListener) {
             mediaQuery.addListener(handleMotionPreference);
+        }
+    }
+
+    function handleBrokenImages() {
+        const skillLogos = document.querySelectorAll('.skill-logo');
+        
+        skillLogos.forEach(function(img) {
+            setTimeout(function() {
+                if (!img.complete || img.naturalWidth === 0 || img.offsetWidth === 0) {
+                    replaceWithFallback(img);
+                }
+            }, 100);
+            
+            img.addEventListener('error', function() {
+                replaceWithFallback(this);
+            });
+            
+            img.addEventListener('load', function() {
+                const fallback = this.nextElementSibling;
+                if (fallback && fallback.classList.contains('skill-logo-fallback')) {
+                    fallback.remove();
+                    this.style.display = '';
+                }
+            });
+        });
+        
+        function replaceWithFallback(img) {
+            if (img.nextElementSibling && img.nextElementSibling.classList.contains('skill-logo-fallback')) {
+                return;
+            }
+            
+            img.style.display = 'none';
+            
+            const replacement = document.createElement('div');
+            replacement.className = 'skill-logo-fallback';
+            replacement.textContent = img.alt;
+            
+            img.parentNode.insertBefore(replacement, img.nextSibling);
         }
     }
 
